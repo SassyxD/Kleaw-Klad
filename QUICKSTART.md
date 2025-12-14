@@ -14,7 +14,7 @@ Make sure you have these installed:
 
 ### 1️⃣ Clone Repository
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/SassyxD/Kleaw-Klad
 cd Kleaw-Klad
 ```
 
