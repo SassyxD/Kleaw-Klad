@@ -24,8 +24,8 @@ Klaew Klad is an AI-powered flood forecasting and evacuation system for Hat Yai,
 
 1. **Fork the Repository**
 ```bash
-git fork https://github.com/your-org/Kleaw-Klad
-git clone https://github.com/your-username/Kleaw-Klad
+git fork https://github.com/SassyxD/Kleaw-Klad
+git clone https://github.com/SassyxD/Kleaw-Klad
 cd Kleaw-Klad
 ```
 
