@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:3001/api
+      - NEXT_PUBLIC_AI_API_URL=http://localhost:8000/api/ai
+      - NEXT_PUBLIC_MAPBOX_TOKEN=${MAPBOX_TOKEN:-pk.test}
+    depends_on:
+      - backend-platform
+      - backend-ai
+    networks:
+      - klaew-klad
+
+  backend-platform:
+    build:
+      context: ./backend-platform
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - JWT_SECRET=${JWT_SECRET:-dev_secret_key_for_development_only_change_in_production_minimum_32}
+      - AI_SERVICE_URL=http://backend-ai:8000/api/ai
+      - NODE_ENV=production
+    depends_on:
+      - backend-ai
+    networks:
+      - klaew-klad
+
+  backend-ai:
+    build:
+      context: ./backend-ai
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - ENVIRONMENT=production
+    volumes:
+      - ai-data:/app/static
+    networks:
+      - klaew-klad
+
+networks:
+  klaew-klad:
+    driver: bridge
+
+volumes:
+  ai-data:
