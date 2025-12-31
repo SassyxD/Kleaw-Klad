@@ -127,15 +127,22 @@ interface LanguageContextType {
   setLanguage: (lang: Language) => void
   toggleLanguage: () => void
   t: (key: string) => string
+  isTransitioning: boolean
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>('th')
+  const [isTransitioning, setIsTransitioning] = useState(false)
 
   const toggleLanguage = useCallback(() => {
-    setLanguage(prev => prev === 'th' ? 'en' : 'th')
+    setIsTransitioning(true)
+    // Small delay for smooth visual transition
+    setTimeout(() => {
+      setLanguage(prev => prev === 'th' ? 'en' : 'th')
+      setTimeout(() => setIsTransitioning(false), 150)
+    }, 50)
   }, [])
 
   const t = useCallback((key: string): string => {
@@ -152,6 +159,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     setLanguage,
     toggleLanguage,
     t,
+    isTransitioning,
   }
 
   return (

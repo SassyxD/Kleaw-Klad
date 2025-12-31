@@ -68,35 +68,37 @@ export default function SystemStatusCard() {
     }
   ]
 
+  const { isTransitioning } = useLanguage()
+
   return (
-    <div className="dashboard-card animate-in" style={{ animationDelay: '0.4s' }}>
+    <div className="dashboard-card card-animate hover-lift">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-navy-100 rounded-lg flex items-center justify-center">
+          <div className="w-8 h-8 bg-navy-100 rounded-lg flex items-center justify-center transition-transform duration-300 hover:scale-110">
             <Cpu className="w-4 h-4 text-navy-600" />
           </div>
           <div>
-            <h2 className="text-base font-semibold text-navy-800">
+            <h2 className={`text-base font-semibold text-navy-800 transition-all duration-200 ${isTransitioning ? 'opacity-0 -translate-y-1' : 'opacity-100 translate-y-0'}`}>
               {t('system.title')}
             </h2>
           </div>
         </div>
-        {getStatusIndicator(systemStatus.modelStatus)}
+        <div className="transition-all duration-300">{getStatusIndicator(systemStatus.modelStatus)}</div>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 gap-3">
+      <div className="grid grid-cols-1 gap-3 stagger-children">
         {stats.map((stat, index) => {
           const Icon = stat.icon
           return (
             <div 
               key={index}
-              className="flex items-center justify-between py-2 px-3 bg-gray-50 rounded-lg"
+              className="flex items-center justify-between py-2 px-3 bg-gray-50 rounded-lg transition-all duration-200 hover:bg-gray-100 hover:shadow-sm"
             >
               <div className="flex items-center space-x-2">
-                <Icon className={cn("w-4 h-4", stat.color)} />
-                <span className="text-sm text-gray-600">{stat.label}</span>
+                <Icon className={cn("w-4 h-4 transition-transform duration-200 hover:scale-110", stat.color)} />
+                <span className={`text-sm text-gray-600 transition-all duration-200 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>{stat.label}</span>
               </div>
               <span className={cn("text-sm font-semibold", stat.color)}>
                 {stat.value}

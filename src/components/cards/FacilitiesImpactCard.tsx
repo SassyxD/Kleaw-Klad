@@ -28,7 +28,7 @@ const chartData = facilityCategories.map(cat => ({
 }))
 
 export default function FacilitiesImpactCard() {
-  const { language, t } = useLanguage()
+  const { language, t, isTransitioning } = useLanguage()
   const totalFacilities = facilityCategories.reduce((acc, cat) => acc + cat.count, 0)
   const totalAffected = facilityCategories.reduce((acc, cat) => acc + cat.affected, 0)
 
@@ -36,7 +36,7 @@ export default function FacilitiesImpactCard() {
     if (active && payload && payload.length) {
       const data = payload[0].payload
       return (
-        <div className="custom-tooltip">
+        <div className="custom-tooltip scale-in">
           <p className="font-medium">{language === 'th' ? data.name : data.nameEn}</p>
           <p className="text-xs">{language === 'th' ? 'ได้รับผลกระทบ' : 'Affected'}: {data.value}/{data.total}</p>
         </div>
@@ -46,15 +46,15 @@ export default function FacilitiesImpactCard() {
   }
 
   return (
-    <div className="dashboard-card animate-in" style={{ animationDelay: '0.2s' }}>
+    <div className="dashboard-card card-animate hover-lift">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-warning-100 rounded-lg flex items-center justify-center">
+          <div className="w-8 h-8 bg-warning-100 rounded-lg flex items-center justify-center transition-transform duration-300 hover:scale-110">
             <Building2 className="w-4 h-4 text-warning-600" />
           </div>
           <div>
-            <h2 className="text-base font-semibold text-navy-800">
+            <h2 className={`text-base font-semibold text-navy-800 transition-all duration-200 ${isTransitioning ? 'opacity-0 -translate-y-1' : 'opacity-100 translate-y-0'}`}>
               {t('facilities.title')}
             </h2>
           </div>
@@ -96,15 +96,15 @@ export default function FacilitiesImpactCard() {
             const Icon = cat.icon
             const percentage = cat.count > 0 ? ((cat.affected / cat.count) * 100).toFixed(0) : 0
             return (
-              <div key={cat.type} className="flex items-center justify-between py-1.5">
+              <div key={cat.type} className="flex items-center justify-between py-1.5 transition-all duration-200 hover:bg-gray-50 rounded-lg px-1 -mx-1">
                 <div className="flex items-center space-x-2">
                   <div 
-                    className="w-6 h-6 rounded flex items-center justify-center"
+                    className="w-6 h-6 rounded flex items-center justify-center transition-transform duration-200 hover:scale-110"
                     style={{ backgroundColor: `${cat.color}20` }}
                   >
                     <Icon className="w-3.5 h-3.5" style={{ color: cat.color }} />
                   </div>
-                  <span className="text-sm text-navy-700">{language === 'th' ? cat.name : cat.nameEn}</span>
+                  <span className={`text-sm text-navy-700 transition-all duration-200 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>{language === 'th' ? cat.name : cat.nameEn}</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <span className="text-sm font-semibold" style={{ color: cat.color }}>
@@ -120,8 +120,8 @@ export default function FacilitiesImpactCard() {
 
       {/* AI Analysis Note */}
       <div className="mt-4 pt-3 border-t border-gray-100">
-        <div className="flex items-center space-x-2 text-xs text-gray-500">
-          <Brain className="w-3.5 h-3.5 text-secondary-500" />
+        <div className={`flex items-center space-x-2 text-xs text-gray-500 transition-all duration-200 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
+          <Brain className="w-3.5 h-3.5 text-secondary-500 animate-pulse" />
           <span>{t('facilities.analysis')}</span>
         </div>
       </div>

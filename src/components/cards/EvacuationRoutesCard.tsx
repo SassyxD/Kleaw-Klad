@@ -44,16 +44,18 @@ export default function EvacuationRoutesCard() {
     }
   }
 
+  const { isTransitioning } = useLanguage()
+
   return (
-    <div className="dashboard-card animate-in" style={{ animationDelay: '0.3s' }}>
+    <div className="dashboard-card card-animate hover-lift">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-secondary-100 rounded-lg flex items-center justify-center">
+          <div className="w-8 h-8 bg-secondary-100 rounded-lg flex items-center justify-center transition-transform duration-300 hover:scale-110">
             <Route className="w-4 h-4 text-secondary-600" />
           </div>
           <div>
-            <h2 className="text-base font-semibold text-navy-800">
+            <h2 className={`text-base font-semibold text-navy-800 transition-all duration-200 ${isTransitioning ? 'opacity-0 -translate-y-1' : 'opacity-100 translate-y-0'}`}>
               {t('evacuation.title')}
             </h2>
           </div>
@@ -61,22 +63,23 @@ export default function EvacuationRoutesCard() {
       </div>
 
       {/* Routes List */}
-      <div className="space-y-3">
-        {evacuationRoutes.map((route) => {
+      <div className="space-y-3 stagger-children">
+        {evacuationRoutes.map((route, index) => {
           const statusColors = getStatusColor(route.status)
           return (
             <div 
               key={route.id}
               className={cn(
-                "p-3 rounded-lg border transition-all duration-200 hover:shadow-sm",
-                route.status === 'closed' ? 'bg-danger-50 border-danger-200' : 'bg-gray-50 border-gray-200'
+                "p-3 rounded-lg border transition-all duration-300 hover:shadow-md hover:-translate-y-0.5",
+                route.status === 'closed' ? 'bg-danger-50 border-danger-200' : 'bg-gray-50 border-gray-200 hover:border-gray-300'
               )}
+              style={{ animationDelay: `${index * 0.05}s` }}
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center space-x-2 mb-1">
-                    {getStatusIcon(route.status)}
-                    <span className="text-sm font-medium text-navy-800">{language === 'th' ? route.nameTh : route.name}</span>
+                    <span className="transition-transform duration-200">{getStatusIcon(route.status)}</span>
+                    <span className={`text-sm font-medium text-navy-800 transition-all duration-200 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>{language === 'th' ? route.nameTh : route.name}</span>
                   </div>
                   
                   <div className="flex items-center space-x-4 text-xs text-gray-500">

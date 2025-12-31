@@ -42,12 +42,12 @@ export default function LoginModal() {
     <div className="fixed inset-0 z-[9999] flex items-center justify-center">
       {/* Backdrop */}
       <div 
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm fade-in"
         onClick={() => setShowLoginModal(false)}
       />
       
       {/* Modal */}
-      <div className="relative w-full max-w-md mx-4 bg-white rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+      <div className="relative w-full max-w-md mx-4 bg-white rounded-2xl shadow-2xl overflow-hidden scale-in">
         {/* Header */}
         <div className="bg-gradient-to-r from-primary-500 to-primary-600 px-6 py-5">
           <div className="flex items-center justify-between">
@@ -63,7 +63,7 @@ export default function LoginModal() {
             </div>
             <button
               onClick={() => setShowLoginModal(false)}
-              className="p-2 rounded-lg text-white/80 hover:text-white hover:bg-white/20 transition-colors"
+              className="p-2 rounded-lg text-white/80 hover:text-white hover:bg-white/20 transition-all duration-200 btn-press hover:rotate-90"
             >
               <X className="w-5 h-5" />
             </button>
@@ -71,11 +71,11 @@ export default function LoginModal() {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+        <form onSubmit={handleSubmit} className="p-6 space-y-5 stagger-children">
           {/* Error Message */}
           {error && (
-            <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-              <AlertCircle className="w-4 h-4 flex-shrink-0" />
+            <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm bounce-subtle">
+              <AlertCircle className="w-4 h-4 flex-shrink-0 animate-pulse" />
               <span>{error}</span>
             </div>
           )}
@@ -140,10 +140,10 @@ export default function LoginModal() {
             type="submit"
             disabled={isLoading}
             className={cn(
-              "w-full py-3 rounded-xl font-medium text-white transition-all",
+              "w-full py-3 rounded-xl font-medium text-white transition-all duration-200 btn-press",
               isLoading
                 ? "bg-primary-400 cursor-not-allowed"
-                : "bg-primary-500 hover:bg-primary-600 active:scale-[0.98]"
+                : "bg-primary-500 hover:bg-primary-600 hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.98]"
             )}
           >
             {isLoading ? (
@@ -165,14 +165,14 @@ export default function LoginModal() {
               <button
                 type="button"
                 onClick={() => handleDemoLogin('admin@klaewklad.th', 'admin123')}
-                className="w-full py-2 px-4 bg-gray-50 hover:bg-gray-100 rounded-lg text-sm text-gray-600 transition-colors text-left"
+                className="w-full py-2 px-4 bg-gray-50 hover:bg-gray-100 rounded-lg text-sm text-gray-600 transition-all duration-200 text-left btn-press hover:shadow-sm hover:-translate-y-0.5"
               >
                 <span className="font-medium">Admin:</span> admin@klaewklad.th / admin123
               </button>
               <button
                 type="button"
                 onClick={() => handleDemoLogin('demo@klaewklad.th', 'demo')}
-                className="w-full py-2 px-4 bg-gray-50 hover:bg-gray-100 rounded-lg text-sm text-gray-600 transition-colors text-left"
+                className="w-full py-2 px-4 bg-gray-50 hover:bg-gray-100 rounded-lg text-sm text-gray-600 transition-all duration-200 text-left btn-press hover:shadow-sm hover:-translate-y-0.5"
               >
                 <span className="font-medium">Demo:</span> demo@klaewklad.th / demo
               </button>

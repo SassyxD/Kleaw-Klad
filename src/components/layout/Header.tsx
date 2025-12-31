@@ -35,7 +35,7 @@ const navTabs = [
 ]
 
 export default function Header({ activeTab, onTabChange, onToggleMobilePanel, showMobilePanel }: HeaderProps) {
-  const { language, toggleLanguage, t } = useLanguage()
+  const { language, toggleLanguage, t, isTransitioning } = useLanguage()
   const { user, isAuthenticated, logout, setShowLoginModal } = useAuth()
   const { unreadCount, showNotificationPanel, setShowNotificationPanel } = useNotifications()
 
@@ -46,18 +46,20 @@ export default function Header({ activeTab, onTabChange, onToggleMobilePanel, sh
         {/* Mobile Menu Button */}
         <button 
           onClick={onToggleMobilePanel}
-          className="lg:hidden p-2 -ml-1 rounded-lg text-gray-300 hover:bg-navy-800 hover:text-white transition-colors"
+          className="lg:hidden p-2 -ml-1 rounded-lg text-gray-300 hover:bg-navy-800 hover:text-white transition-all duration-200 btn-press"
         >
-          {showMobilePanel ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          <span className="transition-transform duration-300" style={{ display: 'block', transform: showMobilePanel ? 'rotate(90deg)' : 'rotate(0deg)' }}>
+            {showMobilePanel ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </span>
         </button>
 
         {/* Logo */}
-        <div className="flex items-center space-x-2 md:space-x-3">
-          <div className="w-8 h-8 md:w-9 md:h-9 bg-gradient-to-br from-primary-400 to-primary-600 rounded-lg flex items-center justify-center shadow-md">
+        <div className="flex items-center space-x-2 md:space-x-3 group cursor-pointer">
+          <div className="w-8 h-8 md:w-9 md:h-9 bg-gradient-to-br from-primary-400 to-primary-600 rounded-lg flex items-center justify-center shadow-md transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
             <Droplets className="w-4 h-4 md:w-5 md:h-5 text-white" />
           </div>
           <div className="hidden sm:flex flex-col">
-            <span className="font-semibold text-sm leading-tight">Klaew Klad</span>
+            <span className="font-semibold text-sm leading-tight transition-colors duration-200 group-hover:text-primary-300">Klaew Klad</span>
             <span className="text-[10px] text-gray-400 leading-tight hidden md:block">Hat Yai Flood Digital Twin</span>
           </div>
         </div>
@@ -71,14 +73,20 @@ export default function Header({ activeTab, onTabChange, onToggleMobilePanel, sh
                 key={tab.id}
                 onClick={() => onTabChange(tab.id)}
                 className={cn(
-                  'flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200',
+                  'flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 btn-press',
                   activeTab === tab.id
-                    ? 'bg-primary-500 text-white shadow-md'
-                    : 'text-gray-300 hover:bg-navy-800 hover:text-white'
+                    ? 'bg-primary-500 text-white shadow-md scale-[1.02]'
+                    : 'text-gray-300 hover:bg-navy-800 hover:text-white hover:scale-[1.02]'
                 )}
               >
-                <Icon className="w-4 h-4" />
-                <span>{t(tab.labelKey)}</span>
+                <Icon className={cn(
+                  "w-4 h-4 transition-transform duration-300",
+                  activeTab === tab.id && "scale-110"
+                )} />
+                <span className={cn(
+                  "transition-all duration-200",
+                  isTransitioning ? "opacity-0 -translate-y-1" : "opacity-100 translate-y-0"
+                )}>{t(tab.labelKey)}</span>
               </button>
             )
           })}
@@ -90,11 +98,17 @@ export default function Header({ activeTab, onTabChange, onToggleMobilePanel, sh
         {/* Language Selector */}
         <button 
           onClick={toggleLanguage}
-          className="flex items-center space-x-1 px-2 md:px-3 py-1.5 rounded-lg text-sm text-gray-300 hover:bg-navy-800 hover:text-white transition-colors"
+          className="flex items-center space-x-1 px-2 md:px-3 py-1.5 rounded-lg text-sm text-gray-300 hover:bg-navy-800 hover:text-white transition-all duration-200 btn-press group"
         >
-          <Globe className="w-4 h-4" />
-          <span className="font-medium hidden sm:inline">{language.toUpperCase()}</span>
-          <ChevronDown className="w-3 h-3 hidden sm:block" />
+          <Globe className={cn(
+            "w-4 h-4 transition-transform duration-500",
+            isTransitioning && "rotate-180"
+          )} />
+          <span className={cn(
+            "font-medium hidden sm:inline transition-all duration-200",
+            isTransitioning ? "opacity-0 scale-90" : "opacity-100 scale-100"
+          )}>{language.toUpperCase()}</span>
+          <ChevronDown className="w-3 h-3 hidden sm:block transition-transform duration-200 group-hover:rotate-180" />
         </button>
 
         {/* Notifications */}
@@ -102,15 +116,18 @@ export default function Header({ activeTab, onTabChange, onToggleMobilePanel, sh
           <button 
             onClick={() => setShowNotificationPanel(!showNotificationPanel)}
             className={cn(
-              "relative p-2 rounded-lg transition-colors",
+              "relative p-2 rounded-lg transition-all duration-200 btn-press",
               showNotificationPanel 
                 ? "bg-navy-800 text-white" 
                 : "text-gray-300 hover:bg-navy-800 hover:text-white"
             )}
           >
-            <Bell className="w-5 h-5" />
+            <Bell className={cn(
+              "w-5 h-5 transition-transform duration-300",
+              showNotificationPanel && "scale-110"
+            )} />
             {unreadCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] flex items-center justify-center text-[10px] font-bold bg-danger-500 text-white rounded-full px-1 animate-pulse">
+              <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] flex items-center justify-center text-[10px] font-bold bg-danger-500 text-white rounded-full px-1 badge-pulse">
                 {unreadCount}
               </span>
             )}
