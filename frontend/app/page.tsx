@@ -1,130 +1,87 @@
-import Link from 'next/link';
-import { Droplets, Shield, Map, Users } from 'lucide-react';
+'use client';
 
-export default function HomePage() {
+import { useRouter } from 'next/navigation';
+import { Waves, BarChart3, Map, ArrowRight } from 'lucide-react';
+
+export default function LandingPage() {
+  const router = useRouter();
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
-      {/* Hero Section */}
-      <header className="container mx-auto px-4 py-8">
-        <nav className="flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <Droplets className="h-8 w-8 text-blue-600" />
-            <span className="text-2xl font-bold text-gray-900">Klaew Klad</span>
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500">
+      <div className="container mx-auto px-6 py-20">
+        {/* Hero Section */}
+        <div className="text-center text-white mb-16">
+          <div className="flex justify-center mb-6">
+            <div className="h-20 w-20 rounded-full bg-white/20 backdrop-blur-lg flex items-center justify-center">
+              <Waves className="h-12 w-12" />
+            </div>
           </div>
-          <Link 
-            href="/login"
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+
+          <h1 className="text-6xl font-bold mb-4">Klaew Klad</h1>
+          <p className="text-2xl mb-2">Digital Twin Flood Warning System</p>
+          <p className="text-lg opacity-90">Powered by Huawei MindSpore AI</p>
+        </div>
+
+        {/* Role Selection */}
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          {/* Executive Dashboard Card */}
+          <div
+            onClick={() => router.push('/dashboard')}
+            className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 cursor-pointer hover:bg-white/20 transition-all border border-white/20 hover:scale-105"
           >
-            Login
-          </Link>
-        </nav>
-      </header>
+            <BarChart3 className="h-12 w-12 text-white mb-4" />
+            <h2 className="text-2xl font-bold text-white mb-2">Executive Dashboard</h2>
+            <p className="text-white/80 mb-6">
+              High-level overview for decision makers. View system status, predictions, and AI recommendations.
+            </p>
+            <div className="flex items-center text-white font-semibold">
+              <span>View Dashboard</span>
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </div>
+          </div>
 
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-16">
-        <div className="text-center max-w-4xl mx-auto mb-16">
-          <h1 className="text-5xl font-bold text-gray-900 mb-6">
-            Satellite-Driven Flood Forecasting
-            <span className="block text-blue-600 mt-2">for Hat Yai</span>
-          </h1>
-          <p className="text-xl text-gray-600 mb-8">
-            AI-powered digital twin system providing real-time flood monitoring, 
-            risk assessment, and strategic evacuation planning
-          </p>
-          <div className="flex gap-4 justify-center">
-            <Link 
-              href="/client"
-              className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold"
-            >
-              Public Portal
-            </Link>
-            <Link 
-              href="/operator"
-              className="px-8 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition font-semibold"
-            >
-              Operator Dashboard
-            </Link>
+          {/* Operation Map Card */}
+          <div
+            onClick={() => router.push('/map')}
+            className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 cursor-pointer hover:bg-white/20 transition-all border border-white/20 hover:scale-105"
+          >
+            <Map className="h-12 w-12 text-white mb-4" />
+            <h2 className="text-2xl font-bold text-white mb-2">Operation Map</h2>
+            <p className="text-white/80 mb-6">
+              Real-time flood monitoring and evacuation planning. Powered by SAR de-clouding and GNN risk analysis.
+            </p>
+            <div className="flex items-center text-white font-semibold">
+              <span>Open Map</span>
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </div>
           </div>
         </div>
 
-        {/* Features Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-          <FeatureCard
-            icon={<Map className="h-12 w-12 text-blue-600" />}
-            title="Digital Twin"
-            description="Real-time 3D visualization of Hat Yai with live flood data integration"
-          />
-          <FeatureCard
-            icon={<Shield className="h-12 w-12 text-green-600" />}
-            title="Risk Assessment"
-            description="GNN-powered infrastructure risk propagation and cascade prediction"
-          />
-          <FeatureCard
-            icon={<Droplets className="h-12 w-12 text-cyan-600" />}
-            title="SAR Translation"
-            description="Cloud-penetrating vision using CycleGAN for continuous monitoring"
-          />
-          <FeatureCard
-            icon={<Users className="h-12 w-12 text-purple-600" />}
-            title="Smart Evacuation"
-            description="RL-based dynamic routing for optimal evacuation planning"
-          />
-        </div>
-
-        {/* Stats */}
-        <div className="mt-20 grid md:grid-cols-3 gap-8 max-w-4xl mx-auto text-center">
-          <StatCard number="35s" label="Processing Time (50km²)" />
-          <StatCard number="92.5%" label="Flood Segmentation IoU" />
-          <StatCard number="2h" label="Early Warning Window" />
-        </div>
-
-        {/* Technology */}
-        <div className="mt-20 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Powered By</h2>
-          <div className="flex flex-wrap justify-center gap-6 text-gray-600">
-            <TechBadge>Huawei MindSpore</TechBadge>
-            <TechBadge>ModelArts</TechBadge>
-            <TechBadge>CANN</TechBadge>
-            <TechBadge>Graph Neural Networks</TechBadge>
-            <TechBadge>Reinforcement Learning</TechBadge>
+        {/* Features */}
+        <div className="mt-20 text-center text-white">
+          <h3 className="text-xl font-semibold mb-8">Powered by Advanced AI</h3>
+          <div className="flex flex-wrap justify-center gap-8">
+            <div className="flex items-center gap-2">
+              <div className="h-2 w-2 bg-white rounded-full animate-pulse" />
+              <span>CycleGAN De-clouding</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="h-2 w-2 bg-white rounded-full animate-pulse" />
+              <span>GNN Risk Propagation</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="h-2 w-2 bg-white rounded-full animate-pulse" />
+              <span>RL Evacuation Routing</span>
+            </div>
           </div>
         </div>
-      </main>
 
-      {/* Footer */}
-      <footer className="container mx-auto px-4 py-8 mt-20 border-t border-gray-200">
-        <div className="text-center text-gray-600">
-          <p>© 2025 Klaew Klad. Disaster Management for Southern Thailand.</p>
-          <p className="mt-2 text-sm">Huawei MindSpore AI Innovation Competition</p>
+        {/* Footer */}
+        <div className="mt-16 text-center text-white/60 text-sm">
+          <p>Huawei ICT Innovation Competition 2024</p>
+          <p className="mt-2">Hat Yai, Songkhla, Thailand</p>
         </div>
-      </footer>
+      </div>
     </div>
-  );
-}
-
-function FeatureCard({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) {
-  return (
-    <div className="p-6 bg-white rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition">
-      <div className="mb-4">{icon}</div>
-      <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
-      <p className="text-gray-600">{description}</p>
-    </div>
-  );
-}
-
-function StatCard({ number, label }: { number: string; label: string }) {
-  return (
-    <div className="p-6 bg-blue-50 rounded-xl">
-      <div className="text-4xl font-bold text-blue-600 mb-2">{number}</div>
-      <div className="text-gray-700">{label}</div>
-    </div>
-  );
-}
-
-function TechBadge({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="px-4 py-2 bg-gray-100 rounded-full text-sm font-medium">
-      {children}
-    </span>
   );
 }
