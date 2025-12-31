@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { MapContainer, TileLayer, Polygon, Polyline, CircleMarker, Popup, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import { useDashboard, BasemapType } from '@/context/DashboardContext'
@@ -209,9 +209,20 @@ function getFacilityColor(type: string, status: string): string {
 export default function FloodMap() {
   const { mapLayers, basemapType } = useDashboard()
   const [isClient, setIsClient] = useState(false)
+  const [mapKey, setMapKey] = useState(0)
+  const mapInitialized = useRef(false)
 
   useEffect(() => {
-    setIsClient(true)
+    // Only initialize once to prevent "Map container is already initialized" error
+    if (!mapInitialized.current) {
+      mapInitialized.current = true
+      setIsClient(true)
+    }
+    
+    // Cleanup on unmount
+    return () => {
+      mapInitialized.current = false
+    }
   }, [])
 
   if (!isClient) {
@@ -230,6 +241,7 @@ export default function FloodMap() {
 
   return (
     <MapContainer
+      key={`map-${mapKey}`}
       center={HAT_YAI_CENTER}
       zoom={DEFAULT_ZOOM}
       className="w-full h-full"

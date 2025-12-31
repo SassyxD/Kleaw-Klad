@@ -56,7 +56,7 @@ export default function Home() {
                   <MapPanel />
                   
                   {/* Time Slider Overlay */}
-                  <div className="absolute bottom-20 md:bottom-6 left-2 right-2 md:left-6 md:right-20 z-[800]">
+                  <div className="absolute bottom-20 md:bottom-6 left-2 right-2 md:left-6 md:right-56 lg:right-60 z-[800]">
                     <TimeSlider 
                       value={currentTime} 
                       onChange={setCurrentTime} 

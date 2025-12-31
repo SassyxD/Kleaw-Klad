@@ -35,8 +35,8 @@ export default function MapPanel() {
         <MapControls />
       </div>
 
-      {/* Legend - Hidden on small mobile */}
-      <div className="hidden sm:block absolute bottom-28 md:bottom-24 right-2 md:right-4 z-[1000]">
+      {/* Legend - Positioned above TimeSlider */}
+      <div className="hidden sm:block absolute bottom-32 lg:bottom-28 right-2 md:right-4 z-[900]">
         <MapLegend />
       </div>
     </div>
