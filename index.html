@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klaew Klad – Hat Yai Flood Digital Twin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <header class="top-bar">
+        <div class="top-bar-left">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="20" cy="20" r="18" stroke="#60A5FA" stroke-width="2" fill="none"/>
+                    <path d="M12 28 Q20 12 28 28" stroke="#3B82F6" stroke-width="2" fill="none"/>
+                    <circle cx="20" cy="18" r="4" fill="#2563EB"/>
+                    <path d="M16 24 L20 30 L24 24" stroke="#1D4ED8" stroke-width="2" fill="none"/>
+                </svg>
+                <span class="logo-text">Klaew Klad</span>
+                <span class="logo-subtitle">– Hat Yai Flood Digital Twin</span>
+            </div>
+            <nav class="nav-tabs">
+                <a href="#" class="nav-tab active">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" rx="1"/>
+                        <rect x="14" y="3" width="7" height="7" rx="1"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1"/>
+                        <rect x="14" y="14" width="7" height="7" rx="1"/>
+                    </svg>
+                    ภาพรวม
+                </a>
+                <a href="#" class="nav-tab">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2C6 8 2 10 2 14c0 4 4 8 10 8s10-4 10-8c0-4-4-6-10-12z"/>
+                    </svg>
+                    น้ำท่วม
+                </a>
+                <a href="#" class="nav-tab">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                    </svg>
+                    ไฟฟ้า
+                </a>
+                <a href="#" class="nav-tab">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/>
+                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                    </svg>
+                    ภัยแล้ง
+                </a>
+            </nav>
+        </div>
+        <div class="top-bar-right">
+            <button class="icon-btn" title="เปลี่ยนภาษา">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M2 12h20M12 2c2.5 2.5 4 6 4 10s-1.5 7.5-4 10c-2.5-2.5-4-6-4-10s1.5-7.5 4-10z"/>
+                </svg>
+            </button>
+            <button class="icon-btn notification" title="การแจ้งเตือน">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 1 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                </svg>
+                <span class="notification-badge">3</span>
+            </button>
+            <div class="user-avatar">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=operator" alt="User">
+            </div>
+            <button class="login-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                    <polyline points="10,17 15,12 10,7"/>
+                    <line x1="15" y1="12" x2="3" y2="12"/>
+                </svg>
+                เข้าสู่ระบบ / Login
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Left Analytics Panel -->
+        <aside class="analytics-panel">
+            <!-- Scenario Selector Card -->
+            <div class="card">
+                <div class="card-header">
+                    <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2C6 8 2 10 2 14c0 4 4 8 10 8s10-4 10-8c0-4-4-6-10-12z"/>
+                    </svg>
+                    <h3 class="card-title">สถานการณ์จำลองน้ำท่วม</h3>
+                </div>
+                <div class="card-content">
+                    <div class="form-group">
+                        <label class="form-label">พื้นที่</label>
+                        <select class="form-select">
+                            <option value="all">ทั้งประเทศ</option>
+                            <option value="hatyai" selected>หาดใหญ่</option>
+                            <option value="utapao">ลุ่มน้ำอู่ตะเภา</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">ช่วงเวลา</label>
+                        <div class="time-chips">
+                            <button class="chip active">วันนี้</button>
+                            <button class="chip">3 วัน</button>
+                            <button class="chip">7 วัน</button>
+                            <button class="chip">30 วัน</button>
+                        </div>
+                        <div class="date-range">
+                            <input type="date" class="date-input" value="2025-12-24">
+                            <span class="date-separator">–</span>
+                            <input type="date" class="date-input" value="2025-12-31">
+                        </div>
+                    </div>
+                    <div class="data-source-tag">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+                        </svg>
+                        ข้อมูลจาก Sentinel-1, Sentinel-2, IoT Sensor
+                    </div>
+                </div>
+            </div>
+
+            <!-- Flooded Area Card -->
+            <div class="card">
+                <div class="card-header">
+                    <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                    </svg>
+                    <h3 class="card-title">พื้นที่น้ำท่วมทั้งหมด</h3>
+                </div>
+                <div class="card-content">
+                    <div class="stat-highlight">
+                        <span class="stat-number">2,146,672</span>
+                        <span class="stat-unit">ไร่</span>
+                    </div>
+                    <div class="stat-change negative">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M7 17l5-5 5 5"/>
+                        </svg>
+                        +12.5% จากเมื่อวาน
+                    </div>
+                    <div class="bar-chart-container">
+                        <h4 class="chart-subtitle">ตำบลที่ได้รับผลกระทบสูงสุด 5 อันดับ</h4>
+                        <div class="bar-chart">
+                            <div class="bar-item">
+                                <span class="bar-label">คลองแห</span>
+                                <div class="bar-track">
+                                    <div class="bar-fill historical" style="width: 85%"></div>
+                                    <div class="bar-fill current" style="width: 92%"></div>
+                                </div>
+                                <span class="bar-value">458,230 ไร่</span>
+                            </div>
+                            <div class="bar-item">
+                                <span class="bar-label">คอหงส์</span>
+                                <div class="bar-track">
+                                    <div class="bar-fill historical" style="width: 72%"></div>
+                                    <div class="bar-fill current" style="width: 78%"></div>
+                                </div>
+                                <span class="bar-value">385,120 ไร่</span>
+                            </div>
+                            <div class="bar-item">
+                                <span class="bar-label">หาดใหญ่</span>
+                                <div class="bar-track">
+                                    <div class="bar-fill historical" style="width: 68%"></div>
+                                    <div class="bar-fill current" style="width: 71%"></div>
+                                </div>
+                                <span class="bar-value">352,890 ไร่</span>
+                            </div>
+                            <div class="bar-item">
+                                <span class="bar-label">บ้านพรุ</span>
+                                <div class="bar-track">
+                                    <div class="bar-fill historical" style="width: 55%"></div>
+                                    <div class="bar-fill current" style="width: 62%"></div>
+                                </div>
+                                <span class="bar-value">298,540 ไร่</span>
+                            </div>
+                            <div class="bar-item">
+                                <span class="bar-label">ท่าข้าม</span>
+                                <div class="bar-track">
+                                    <div class="bar-fill historical" style="width: 48%"></div>
+                                    <div class="bar-fill current" style="width: 53%"></div>
+                                </div>
+                                <span class="bar-value">251,892 ไร่</span>
+                            </div>
+                        </div>
+                        <div class="chart-legend">
+                            <span class="legend-item"><span class="legend-color historical"></span>ข้อมูลย้อนหลัง</span>
+                            <span class="legend-item"><span class="legend-color current"></span>ปัจจุบัน</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Critical Facilities Card -->
+            <div class="card">
+                <div class="card-header">
+                    <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 21h18M9 8h1M9 12h1M9 16h1M14 8h1M14 12h1M14 16h1M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/>
+                    </svg>
+                    <h3 class="card-title">โครงสร้างพื้นฐานที่ได้รับผลกระทบ</h3>
+                </div>
+                <div class="card-content">
+                    <div class="donut-chart-container">
+                        <canvas id="facilitiesChart" width="180" height="180"></canvas>
+                        <div class="donut-center">
+                            <span class="donut-total">47</span>
+                            <span class="donut-label">แห่ง</span>
+                        </div>
+                    </div>
+                    <div class="facilities-legend">
+                        <div class="facility-item">
+                            <span class="facility-color" style="background: #EF4444"></span>
+                            <span class="facility-name">โรงพยาบาล</span>
+                            <span class="facility-count">12 แห่ง</span>
+                        </div>
+                        <div class="facility-item">
+                            <span class="facility-color" style="background: #F59E0B"></span>
+                            <span class="facility-name">สถานีไฟฟ้า</span>
+                            <span class="facility-count">8 แห่ง</span>
+                        </div>
+                        <div class="facility-item">
+                            <span class="facility-color" style="background: #3B82F6"></span>
+                            <span class="facility-name">โรงเรียน</span>
+                            <span class="facility-count">18 แห่ง</span>
+                        </div>
+                        <div class="facility-item">
+                            <span class="facility-color" style="background: #10B981"></span>
+                            <span class="facility-name">ศูนย์พักพิง</span>
+                            <span class="facility-count">9 แห่ง</span>
+                        </div>
+                    </div>
+                    <div class="ai-badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2a10 10 0 1 0 10 10"/>
+                            <path d="M12 8v4l2 2"/>
+                        </svg>
+                        วิเคราะห์ด้วย MindSpore GNN (Hydraulic-Aware Graph)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Evacuation Routes Card -->
+            <div class="card">
+                <div class="card-header">
+                    <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 20l-5.447-2.724A1 1 0 0 1 3 16.382V5.618a1 1 0 0 1 1.447-.894L9 7"/>
+                        <path d="M9 20l6-3"/>
+                        <path d="M15 17l5.447 2.724A1 1 0 0 0 21 18.382V7.618a1 1 0 0 0-.553-.894L15 4"/>
+                        <path d="M9 7l6-3"/>
+                        <path d="M9 7v13"/>
+                        <path d="M15 4v13"/>
+                    </svg>
+                    <h3 class="card-title">สถานะการอพยพและเส้นทาง</h3>
+                </div>
+                <div class="card-content">
+                    <div class="routes-list">
+                        <div class="route-item">
+                            <div class="route-info">
+                                <span class="route-name">ถ.กาญจนวนิช → ศูนย์พักพิง ม.อ.</span>
+                                <span class="route-distance">4.2 กม.</span>
+                            </div>
+                            <span class="status-chip green">ปกติ</span>
+                        </div>
+                        <div class="route-item">
+                            <div class="route-info">
+                                <span class="route-name">ถ.นิพัทธ์อุทิศ 1 → วัดโคกสมานคุณ</span>
+                                <span class="route-distance">2.8 กม.</span>
+                            </div>
+                            <span class="status-chip yellow">เสี่ยงน้ำท่วม</span>
+                        </div>
+                        <div class="route-item">
+                            <div class="route-info">
+                                <span class="route-name">ถ.เพชรเกษม → โรงเรียนหาดใหญ่วิทยาลัย</span>
+                                <span class="route-distance">3.5 กม.</span>
+                            </div>
+                            <span class="status-chip green">ปกติ</span>
+                        </div>
+                        <div class="route-item">
+                            <div class="route-info">
+                                <span class="route-name">ถ.ราษฎร์ยินดี → ศูนย์พักพิงเทศบาล</span>
+                                <span class="route-distance">1.9 กม.</span>
+                            </div>
+                            <span class="status-chip red">ปิดชั่วคราว</span>
+                        </div>
+                        <div class="route-item">
+                            <div class="route-info">
+                                <span class="route-name">ถ.ลพบุรีราเมศวร์ → วัดคลองเรียน</span>
+                                <span class="route-distance">5.1 กม.</span>
+                            </div>
+                            <span class="status-chip yellow">เสี่ยงน้ำท่วม</span>
+                        </div>
+                    </div>
+                    <div class="ai-badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                            <path d="M2 17l10 5 10-5"/>
+                            <path d="M2 12l10 5 10-5"/>
+                        </svg>
+                        เส้นทางจาก RL Policy (PPO)
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI System Status Card -->
+            <div class="card">
+                <div class="card-header">
+                    <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="3" width="20" height="14" rx="2"/>
+                        <path d="M8 21h8"/>
+                        <path d="M12 17v4"/>
+                        <path d="M7 8h2v4H7z"/>
+                        <path d="M11 9h2v3h-2z"/>
+                        <path d="M15 7h2v5h-2z"/>
+                    </svg>
+                    <h3 class="card-title">สถานะระบบ AI</h3>
+                </div>
+                <div class="card-content">
+                    <div class="system-status-grid">
+                        <div class="status-item">
+                            <div class="status-icon online">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                    <path d="M22 4L12 14.01l-3-3"/>
+                                </svg>
+                            </div>
+                            <div class="status-detail">
+                                <span class="status-value">ออนไลน์</span>
+                                <span class="status-label">สถานะระบบ</span>
+                            </div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polyline points="12,6 12,12 16,14"/>
+                                </svg>
+                            </div>
+                            <div class="status-detail">
+                                <span class="status-value">5 นาทีที่แล้ว</span>
+                                <span class="status-label">อัปเดตล่าสุด</span>
+                            </div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                                </svg>
+                            </div>
+                            <div class="status-detail">
+                                <span class="status-value">35 วินาที</span>
+                                <span class="status-label">Inference / 50 กม²</span>
+                            </div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 20V10"/>
+                                    <path d="M18 20V4"/>
+                                    <path d="M6 20v-4"/>
+                                </svg>
+                            </div>
+                            <div class="status-detail">
+                                <span class="status-value">92.5% IoU</span>
+                                <span class="status-label">Segmentation Accuracy</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ai-models-list">
+                        <div class="ai-model">
+                            <span class="model-dot active"></span>
+                            <span class="model-name">CycleGAN SAR-to-Optical</span>
+                        </div>
+                        <div class="ai-model">
+                            <span class="model-dot active"></span>
+                            <span class="model-name">GNN Risk Propagation</span>
+                        </div>
+                        <div class="ai-model">
+                            <span class="model-dot active"></span>
+                            <span class="model-name">RL-Based Evacuation</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Right Map Panel -->
+        <section class="map-panel">
+            <!-- Map Layer Controls -->
+            <div class="map-controls">
+                <div class="layer-toggles">
+                    <button class="layer-toggle active" data-layer="flood">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2C6 8 2 10 2 14c0 4 4 8 10 8s10-4 10-8c0-4-4-6-10-12z"/>
+                        </svg>
+                        ชั้นข้อมูลน้ำท่วม
+                    </button>
+                    <button class="layer-toggle active" data-layer="routes">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 6L6 18"/>
+                            <path d="M6 6l12 12"/>
+                        </svg>
+                        เส้นทางอพยพแนะนำ
+                    </button>
+                    <button class="layer-toggle active" data-layer="facilities">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                        จุดสำคัญ
+                    </button>
+                </div>
+            </div>
+
+            <!-- Map Container -->
+            <div id="map"></div>
+
+            <!-- Map Toolbar (Right Edge) -->
+            <div class="map-toolbar">
+                <button class="toolbar-btn" id="zoomIn" title="ซูมเข้า">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="M21 21l-4.35-4.35"/>
+                        <path d="M11 8v6"/>
+                        <path d="M8 11h6"/>
+                    </svg>
+                </button>
+                <button class="toolbar-btn" id="zoomOut" title="ซูมออก">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="M21 21l-4.35-4.35"/>
+                        <path d="M8 11h6"/>
+                    </svg>
+                </button>
+                <div class="toolbar-divider"></div>
+                <button class="toolbar-btn" id="layersBtn" title="จัดการเลเยอร์">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                        <path d="M2 17l10 5 10-5"/>
+                        <path d="M2 12l10 5 10-5"/>
+                    </svg>
+                </button>
+                <button class="toolbar-btn" id="locationBtn" title="ตำแหน่งของฉัน">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="4"/>
+                        <path d="M12 2v2"/>
+                        <path d="M12 20v2"/>
+                        <path d="M2 12h2"/>
+                        <path d="M20 12h2"/>
+                    </svg>
+                </button>
+                <button class="toolbar-btn" id="compassBtn" title="เข็มทิศ">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Map Legend -->
+            <div class="map-legend">
+                <h4 class="legend-title">คำอธิบายสัญลักษณ์</h4>
+                <div class="legend-section">
+                    <span class="legend-label">ระดับน้ำ (ม.)</span>
+                    <div class="legend-gradient">
+                        <div class="gradient-bar"></div>
+                        <div class="gradient-labels">
+                            <span>0</span>
+                            <span>0.5</span>
+                            <span>1.0</span>
+                            <span>1.5</span>
+                            <span>>2.0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="legend-items">
+                    <div class="legend-item">
+                        <span class="legend-symbol facility-hospital"></span>
+                        <span>โรงพยาบาล (เสี่ยง)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-symbol facility-power"></span>
+                        <span>สถานีไฟฟ้า (เสี่ยง)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-symbol facility-shelter"></span>
+                        <span>ศูนย์พักพิง</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-symbol route-safe"></span>
+                        <span>เส้นทางอพยพ AI</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Time Slider -->
+            <div class="time-slider-container">
+                <div class="time-slider-header">
+                    <span class="time-label">การคาดการณ์ตามเวลา</span>
+                    <button class="play-btn" id="playTimeline">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="5,3 19,12 5,21"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="time-slider-track">
+                    <input type="range" id="timeSlider" min="0" max="4" value="0" step="1">
+                    <div class="time-markers">
+                        <span class="time-marker active" data-value="0">ปัจจุบัน</span>
+                        <span class="time-marker" data-value="1">30 นาที</span>
+                        <span class="time-marker" data-value="2">1 ชม.</span>
+                        <span class="time-marker" data-value="3">2 ชม.</span>
+                        <span class="time-marker" data-value="4">4 ชม.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

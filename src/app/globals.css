@@ -1,0 +1,211 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Noto+Sans:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #2F80ED;
+  --color-secondary: #319795;
+  --color-navy: #152438;
+  --color-danger: #EF4444;
+  --color-warning: #F59E0B;
+  --color-success: #10B981;
+  --sidebar-width: 420px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Noto Sans Thai', 'Noto Sans', system-ui, sans-serif;
+  background-color: #F0F4F8;
+  color: #1a202c;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Leaflet overrides */
+.leaflet-container {
+  font-family: 'Noto Sans Thai', 'Noto Sans', system-ui, sans-serif;
+  background: #e5e5e5;
+}
+
+.leaflet-control-zoom {
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.leaflet-control-zoom a {
+  background-color: white !important;
+  color: #334155 !important;
+  border: none !important;
+  width: 36px !important;
+  height: 36px !important;
+  line-height: 36px !important;
+  font-size: 18px !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background-color: #f1f5f9 !important;
+}
+
+.leaflet-control-zoom-in {
+  border-radius: 8px 8px 0 0 !important;
+}
+
+.leaflet-control-zoom-out {
+  border-radius: 0 0 8px 8px !important;
+}
+
+/* Custom map controls */
+.map-control-btn {
+  @apply w-10 h-10 bg-white rounded-lg shadow-card flex items-center justify-center cursor-pointer transition-all duration-200;
+}
+
+.map-control-btn:hover {
+  @apply bg-gray-50 shadow-card-hover;
+}
+
+.map-control-btn.active {
+  @apply bg-primary-500 text-white;
+}
+
+/* Card styles */
+.dashboard-card {
+  @apply bg-white rounded-card shadow-card p-5 transition-all duration-200;
+}
+
+.dashboard-card:hover {
+  @apply shadow-card-hover;
+}
+
+/* Status chips */
+.status-chip {
+  @apply inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium;
+}
+
+.status-chip.success {
+  @apply bg-success-100 text-success-700;
+}
+
+.status-chip.warning {
+  @apply bg-warning-100 text-warning-700;
+}
+
+.status-chip.danger {
+  @apply bg-danger-100 text-danger-700;
+}
+
+.status-chip.info {
+  @apply bg-primary-100 text-primary-700;
+}
+
+/* Time selector chips */
+.time-chip {
+  @apply px-3 py-1.5 rounded-full text-sm font-medium cursor-pointer transition-all duration-200;
+}
+
+.time-chip:not(.active) {
+  @apply bg-gray-100 text-gray-600 hover:bg-gray-200;
+}
+
+.time-chip.active {
+  @apply bg-primary-500 text-white;
+}
+
+/* Progress bars */
+.progress-bar {
+  @apply h-2 rounded-full overflow-hidden bg-gray-200;
+}
+
+.progress-bar-fill {
+  @apply h-full rounded-full transition-all duration-500 ease-out;
+}
+
+/* Tooltips */
+.custom-tooltip {
+  @apply bg-navy-800 text-white px-3 py-2 rounded-lg text-sm shadow-lg;
+}
+
+/* Animation classes */
+.animate-in {
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Pulse animation for live indicators */
+.pulse-live {
+  animation: pulse-live 2s infinite;
+}
+
+@keyframes pulse-live {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Map legend styles */
+.legend-gradient {
+  background: linear-gradient(to right, 
+    rgba(66, 165, 245, 0.3), 
+    rgba(33, 150, 243, 0.5), 
+    rgba(25, 118, 210, 0.7), 
+    rgba(21, 101, 192, 0.9)
+  );
+}
+
+/* Dropdown styles */
+.dropdown-content {
+  @apply absolute z-50 mt-1 w-full bg-white rounded-lg shadow-lg border border-gray-200 py-1 max-h-60 overflow-auto;
+}
+
+.dropdown-item {
+  @apply px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer;
+}
+
+.dropdown-item.selected {
+  @apply bg-primary-50 text-primary-700;
+}
