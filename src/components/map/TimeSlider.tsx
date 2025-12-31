@@ -17,21 +17,21 @@ interface TimeSliderProps {
 }
 
 const timeStepsTh = [
-  { value: 0, label: 'ปัจจุบัน' },
-  { value: 1, label: '+30 นาที' },
-  { value: 2, label: '+1 ชม.' },
-  { value: 3, label: '+2 ชม.' },
-  { value: 4, label: '+3 ชม.' },
-  { value: 5, label: '+6 ชม.' },
+  { value: 0, label: 'ปัจจุบัน', short: 'ปัจจุบัน' },
+  { value: 1, label: '+30 นาที', short: '+30น.' },
+  { value: 2, label: '+1 ชม.', short: '+1ชม.' },
+  { value: 3, label: '+2 ชม.', short: '+2ชม.' },
+  { value: 4, label: '+3 ชม.', short: '+3ชม.' },
+  { value: 5, label: '+6 ชม.', short: '+6ชม.' },
 ]
 
 const timeStepsEn = [
-  { value: 0, label: 'Current' },
-  { value: 1, label: '+30 min' },
-  { value: 2, label: '+1 hr' },
-  { value: 3, label: '+2 hr' },
-  { value: 4, label: '+3 hr' },
-  { value: 5, label: '+6 hr' },
+  { value: 0, label: 'Current', short: 'Now' },
+  { value: 1, label: '+30 min', short: '+30m' },
+  { value: 2, label: '+1 hr', short: '+1h' },
+  { value: 3, label: '+2 hr', short: '+2h' },
+  { value: 4, label: '+3 hr', short: '+3h' },
+  { value: 5, label: '+6 hr', short: '+6h' },
 ]
 
 export default function TimeSlider({ value, onChange }: TimeSliderProps) {
@@ -49,42 +49,42 @@ export default function TimeSlider({ value, onChange }: TimeSliderProps) {
   }, [isPlaying, value, onChange, timeSteps.length])
 
   return (
-    <div className="bg-white rounded-xl shadow-card p-4">
-      <div className="flex items-center space-x-4">
-        {/* Time Label */}
-        <div className="flex items-center space-x-2 min-w-[120px]">
+    <div className="bg-white rounded-xl shadow-card p-2 md:p-4">
+      <div className="flex items-center space-x-2 md:space-x-4">
+        {/* Time Label - Hidden on small mobile */}
+        <div className="hidden sm:flex items-center space-x-2 min-w-[100px] md:min-w-[120px]">
           <Clock className="w-4 h-4 text-primary-500" />
-          <span className="text-sm font-medium text-navy-800">
+          <span className="text-xs md:text-sm font-medium text-navy-800">
             {t('time.forecast')}:
           </span>
         </div>
 
         {/* Playback Controls */}
-        <div className="flex items-center space-x-1">
+        <div className="flex items-center space-x-0.5 md:space-x-1">
           <button 
             onClick={() => onChange(0)}
-            className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
+            className="p-1 md:p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
           >
-            <SkipBack className="w-4 h-4 text-gray-600" />
+            <SkipBack className="w-3.5 h-3.5 md:w-4 md:h-4 text-gray-600" />
           </button>
           <button 
             onClick={() => setIsPlaying(!isPlaying)}
             className={cn(
-              "p-2 rounded-lg transition-colors",
+              "p-1.5 md:p-2 rounded-lg transition-colors",
               isPlaying ? "bg-primary-500 text-white" : "hover:bg-gray-100"
             )}
           >
             {isPlaying ? (
-              <Pause className="w-4 h-4" />
+              <Pause className="w-3.5 h-3.5 md:w-4 md:h-4" />
             ) : (
-              <Play className="w-4 h-4 text-gray-600" />
+              <Play className="w-3.5 h-3.5 md:w-4 md:h-4 text-gray-600" />
             )}
           </button>
           <button 
             onClick={() => onChange(timeSteps.length - 1)}
-            className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
+            className="p-1 md:p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
           >
-            <SkipForward className="w-4 h-4 text-gray-600" />
+            <SkipForward className="w-3.5 h-3.5 md:w-4 md:h-4 text-gray-600" />
           </button>
         </div>
 
@@ -107,17 +107,18 @@ export default function TimeSlider({ value, onChange }: TimeSliderProps) {
               >
                 <div 
                   className={cn(
-                    "w-3 h-3 rounded-full border-2 transition-all duration-200",
+                    "w-2.5 h-2.5 md:w-3 md:h-3 rounded-full border-2 transition-all duration-200",
                     index <= value 
                       ? "bg-primary-500 border-primary-500" 
                       : "bg-white border-gray-300"
                   )}
                 />
                 <span className={cn(
-                  "text-xs mt-1.5 whitespace-nowrap transition-colors",
+                  "text-[9px] md:text-xs mt-1 md:mt-1.5 whitespace-nowrap transition-colors",
                   index === value ? "text-primary-600 font-medium" : "text-gray-500"
                 )}>
-                  {step.label}
+                  <span className="hidden md:inline">{step.label}</span>
+                  <span className="md:hidden">{step.short}</span>
                 </span>
               </button>
             ))}
@@ -125,8 +126,8 @@ export default function TimeSlider({ value, onChange }: TimeSliderProps) {
         </div>
       </div>
 
-      {/* Forecast Info */}
-      <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
+      {/* Forecast Info - Hidden on mobile */}
+      <div className="hidden md:flex mt-3 pt-3 border-t border-gray-100 items-center justify-between text-xs text-gray-500">
         <span>
           {language === 'th' 
             ? '📡 ข้อมูลดาวเทียม: 31 ธ.ค. 2568 10:30 UTC' 

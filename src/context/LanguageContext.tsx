@@ -111,6 +111,9 @@ const translations: Translations = {
   'notification.empty': { th: 'ไม่มีการแจ้งเตือน', en: 'No notifications' },
   'notification.new': { th: 'ใหม่', en: 'New' },
   
+  // Analytics Panel
+  'cards.analytics': { th: 'การวิเคราะห์', en: 'Analytics' },
+  
   // Common
   'common.close': { th: 'ปิด', en: 'Close' },
   'common.cancel': { th: 'ยกเลิก', en: 'Cancel' },

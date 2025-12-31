@@ -50,14 +50,14 @@ export default function MapControls() {
   }, [showBasemapPanel])
 
   return (
-    <div className="flex flex-col space-y-2">
+    <div className="flex flex-col space-y-1.5 md:space-y-2">
       {/* Zoom Controls */}
-      <div className="flex flex-col bg-white rounded-xl shadow-card overflow-hidden">
-        <button className="map-control-btn rounded-none border-b border-gray-100 hover:bg-gray-50 transition-colors">
-          <Plus className="w-5 h-5 text-gray-600" />
+      <div className="flex flex-col bg-white rounded-lg md:rounded-xl shadow-card overflow-hidden">
+        <button className="p-2 md:p-2.5 rounded-none border-b border-gray-100 hover:bg-gray-50 transition-colors">
+          <Plus className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
         </button>
-        <button className="map-control-btn rounded-none hover:bg-gray-50 transition-colors">
-          <Minus className="w-5 h-5 text-gray-600" />
+        <button className="p-2 md:p-2.5 rounded-none hover:bg-gray-50 transition-colors">
+          <Minus className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
         </button>
       </div>
 
@@ -66,29 +66,29 @@ export default function MapControls() {
         <button 
           onClick={() => setShowBasemapPanel(!showBasemapPanel)}
           className={cn(
-            "map-control-btn transition-all",
+            "p-2 md:p-2.5 bg-white rounded-lg md:rounded-xl shadow-card transition-all",
             showBasemapPanel && "bg-primary-50 ring-2 ring-primary-500"
           )}
         >
-          <Layers className={cn("w-5 h-5", showBasemapPanel ? "text-primary-600" : "text-gray-600")} />
+          <Layers className={cn("w-4 h-4 md:w-5 md:h-5", showBasemapPanel ? "text-primary-600" : "text-gray-600")} />
         </button>
 
         {/* Basemap Selection Panel */}
         {showBasemapPanel && (
-          <div className="absolute right-12 top-0 w-48 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-in fade-in slide-in-from-right-2 duration-200">
+          <div className="absolute right-10 md:right-12 top-0 w-40 md:w-48 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-in fade-in slide-in-from-right-2 duration-200">
             {/* Header */}
-            <div className="flex items-center justify-between px-3 py-2 bg-gray-50 border-b border-gray-100">
-              <span className="text-sm font-medium text-gray-700">{t('basemap.title')}</span>
+            <div className="flex items-center justify-between px-2 md:px-3 py-1.5 md:py-2 bg-gray-50 border-b border-gray-100">
+              <span className="text-xs md:text-sm font-medium text-gray-700">{t('basemap.title')}</span>
               <button 
                 onClick={() => setShowBasemapPanel(false)}
                 className="p-1 hover:bg-gray-200 rounded transition-colors"
               >
-                <X className="w-3.5 h-3.5 text-gray-500" />
+                <X className="w-3 h-3 md:w-3.5 md:h-3.5 text-gray-500" />
               </button>
             </div>
             
             {/* Options */}
-            <div className="p-2 space-y-1">
+            <div className="p-1.5 md:p-2 space-y-0.5 md:space-y-1">
               {basemapOptions.map((option) => {
                 const Icon = option.icon
                 const isActive = basemapType === option.id
@@ -100,16 +100,16 @@ export default function MapControls() {
                       setShowBasemapPanel(false)
                     }}
                     className={cn(
-                      "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all",
+                      "w-full flex items-center gap-2 md:gap-3 px-2 md:px-3 py-1.5 md:py-2 rounded-lg text-xs md:text-sm transition-all",
                       isActive
                         ? "bg-primary-50 text-primary-700 font-medium"
                         : "text-gray-600 hover:bg-gray-50"
                     )}
                   >
-                    <Icon className={cn("w-4 h-4", isActive && "text-primary-500")} />
+                    <Icon className={cn("w-3.5 h-3.5 md:w-4 md:h-4", isActive && "text-primary-500")} />
                     <span>{t(option.labelKey)}</span>
                     {isActive && (
-                      <div className="ml-auto w-2 h-2 bg-primary-500 rounded-full" />
+                      <div className="ml-auto w-1.5 h-1.5 md:w-2 md:h-2 bg-primary-500 rounded-full" />
                     )}
                   </button>
                 )
@@ -119,16 +119,16 @@ export default function MapControls() {
         )}
       </div>
       
-      <button className="map-control-btn hover:bg-gray-50 transition-colors">
-        <Compass className="w-5 h-5 text-gray-600" />
+      <button className="p-2 md:p-2.5 bg-white rounded-lg md:rounded-xl shadow-card hover:bg-gray-50 transition-colors">
+        <Compass className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
       </button>
       
-      <button className="map-control-btn hover:bg-gray-50 transition-colors">
-        <Locate className="w-5 h-5 text-gray-600" />
+      <button className="p-2 md:p-2.5 bg-white rounded-lg md:rounded-xl shadow-card hover:bg-gray-50 transition-colors">
+        <Locate className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
       </button>
       
-      <button className="map-control-btn hover:bg-gray-50 transition-colors">
-        <Maximize2 className="w-5 h-5 text-gray-600" />
+      <button className="hidden md:block p-2 md:p-2.5 bg-white rounded-lg md:rounded-xl shadow-card hover:bg-gray-50 transition-colors">
+        <Maximize2 className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
       </button>
     </div>
   )

@@ -26,17 +26,17 @@ export default function MapPanel() {
       <FloodMap />
 
       {/* Layer Toggle Pills */}
-      <div className="absolute top-4 left-4 z-[1000]">
+      <div className="absolute top-2 left-2 md:top-4 md:left-4 z-[1000]">
         <LayerToggle />
       </div>
 
       {/* Right Controls */}
-      <div className="absolute top-4 right-4 z-[1000]">
+      <div className="absolute top-2 right-2 md:top-4 md:right-4 z-[1000]">
         <MapControls />
       </div>
 
-      {/* Legend */}
-      <div className="absolute bottom-24 right-4 z-[1000]">
+      {/* Legend - Hidden on small mobile */}
+      <div className="hidden sm:block absolute bottom-28 md:bottom-24 right-2 md:right-4 z-[1000]">
         <MapLegend />
       </div>
     </div>

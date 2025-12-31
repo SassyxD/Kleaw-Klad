@@ -81,7 +81,7 @@ export default function NotificationPanel() {
   return (
     <div 
       ref={panelRef}
-      className="absolute top-full right-0 mt-2 w-96 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200"
+      className="absolute top-full right-0 mt-2 w-[calc(100vw-1rem)] sm:w-96 max-w-96 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200"
     >
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 bg-gray-50 border-b border-gray-100">
