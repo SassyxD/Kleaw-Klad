@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -6,7 +6,11 @@ export const metadata: Metadata = {
   description: 'Satellite-Driven Digital Twin for Dynamic Flood Impact Forecasting & Strategic Evacuation',
   keywords: ['flood', 'digital twin', 'Hat Yai', 'Thailand', 'disaster management', 'evacuation'],
   authors: [{ name: 'Klaew Klad Team' }],
-  viewport: 'width=device-width, initial-scale=1',
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
   themeColor: '#152438',
 }
 
