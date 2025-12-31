@@ -3,12 +3,36 @@
 import React, { useEffect, useState } from 'react'
 import { MapContainer, TileLayer, Polygon, Polyline, CircleMarker, Popup, useMap } from 'react-leaflet'
 import L from 'leaflet'
-import { useDashboard } from '@/context/DashboardContext'
+import { useDashboard, BasemapType } from '@/context/DashboardContext'
 import 'leaflet/dist/leaflet.css'
 
 // Hat Yai center coordinates
 const HAT_YAI_CENTER: [number, number] = [7.0086, 100.4747]
 const DEFAULT_ZOOM = 12
+
+// Basemap configurations
+const basemapUrls: Record<BasemapType, { url: string; attribution: string }> = {
+  light: {
+    url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+  },
+  dark: {
+    url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+  },
+  satellite: {
+    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+  },
+  terrain: {
+    url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+    attribution: '&copy; <a href="https://opentopomap.org/">OpenTopoMap</a>',
+  },
+  streets: {
+    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  },
+}
 
 // Mock flood zones
 const floodZones = [
@@ -183,7 +207,7 @@ function getFacilityColor(type: string, status: string): string {
 }
 
 export default function FloodMap() {
-  const { mapLayers } = useDashboard()
+  const { mapLayers, basemapType } = useDashboard()
   const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
@@ -201,6 +225,8 @@ export default function FloodMap() {
   const showFlood = mapLayers.find(l => l.id === 'flood')?.visible ?? true
   const showEvacuation = mapLayers.find(l => l.id === 'evacuation')?.visible ?? true
   const showFacilities = mapLayers.find(l => l.id === 'facilities')?.visible ?? true
+  
+  const currentBasemap = basemapUrls[basemapType]
 
   return (
     <MapContainer
@@ -212,10 +238,11 @@ export default function FloodMap() {
     >
       <MapController />
       
-      {/* Base Tile Layer - Light terrain style */}
+      {/* Base Tile Layer - Dynamic basemap */}
       <TileLayer
-        url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        key={basemapType}
+        url={currentBasemap.url}
+        attribution={currentBasemap.attribution}
       />
 
       {/* Flood Zones Layer */}

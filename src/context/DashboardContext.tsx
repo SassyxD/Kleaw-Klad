@@ -48,6 +48,8 @@ export interface MapLayer {
   icon: string
 }
 
+export type BasemapType = 'light' | 'dark' | 'satellite' | 'terrain' | 'streets'
+
 interface DashboardContextType {
   // Data
   totalFloodedArea: number
@@ -63,6 +65,8 @@ interface DashboardContextType {
   setSelectedArea: (area: string) => void
   timeRange: string
   setTimeRange: (range: string) => void
+  basemapType: BasemapType
+  setBasemapType: (type: BasemapType) => void
   
   // UI state
   isLoading: boolean
@@ -119,6 +123,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
   const [timeRange, setTimeRange] = useState('today')
   const [currentForecastTime, setCurrentForecastTime] = useState(0)
   const [isLoading] = useState(false)
+  const [basemapType, setBasemapType] = useState<BasemapType>('light')
 
   const toggleLayer = (layerId: string) => {
     setMapLayers(prev =>
@@ -140,6 +145,8 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     setSelectedArea,
     timeRange,
     setTimeRange,
+    basemapType,
+    setBasemapType,
     isLoading,
     currentForecastTime,
     setCurrentForecastTime,
