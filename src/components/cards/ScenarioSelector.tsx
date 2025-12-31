@@ -10,23 +10,25 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useDashboard } from '@/context/DashboardContext'
-
-const areaOptions = [
-  { value: 'all', label: 'ทั้งประเทศ', labelEn: 'Nationwide' },
-  { value: 'hatyai', label: 'หาดใหญ่', labelEn: 'Hat Yai' },
-  { value: 'utapao', label: 'ลุ่มน้ำอู่ตะเภา', labelEn: 'U-Tapao Basin' },
-]
-
-const timeRanges = [
-  { value: 'today', label: 'วันนี้' },
-  { value: '3days', label: '3 วัน' },
-  { value: '7days', label: '7 วัน' },
-  { value: '30days', label: '30 วัน' },
-]
+import { useLanguage } from '@/context/LanguageContext'
 
 export default function ScenarioSelector() {
   const { selectedArea, setSelectedArea, timeRange, setTimeRange, systemStatus } = useDashboard()
+  const { language, t } = useLanguage()
   const [isAreaOpen, setIsAreaOpen] = useState(false)
+
+  const areaOptions = [
+    { value: 'all', label: t('scenario.allCountry') },
+    { value: 'hatyai', label: t('scenario.hatYai') },
+    { value: 'utapao', label: t('scenario.uTapao') },
+  ]
+
+  const timeRanges = [
+    { value: 'today', label: t('scenario.today') },
+    { value: '3days', label: t('scenario.3days') },
+    { value: '7days', label: t('scenario.7days') },
+    { value: '30days', label: t('scenario.30days') },
+  ]
 
   const selectedAreaOption = areaOptions.find(opt => opt.value === selectedArea)
 
@@ -35,16 +37,15 @@ export default function ScenarioSelector() {
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-base font-semibold text-navy-800">
-          สถานการณ์จำลองน้ำท่วม
+          {t('scenario.title')}
         </h2>
-        <span className="text-xs text-gray-500">Flood Scenario</span>
       </div>
 
       {/* Area Dropdown */}
       <div className="mb-4">
         <label className="text-xs font-medium text-gray-500 mb-1.5 flex items-center">
           <MapPin className="w-3.5 h-3.5 mr-1" />
-          พื้นที่ / Area
+          {t('scenario.area')}
         </label>
         <div className="relative">
           <button
@@ -73,7 +74,6 @@ export default function ScenarioSelector() {
                   )}
                 >
                   <span className="font-medium">{option.label}</span>
-                  <span className="text-gray-400 text-xs ml-2">{option.labelEn}</span>
                 </div>
               ))}
             </div>
@@ -85,7 +85,7 @@ export default function ScenarioSelector() {
       <div className="mb-4">
         <label className="text-xs font-medium text-gray-500 mb-2 flex items-center">
           <Calendar className="w-3.5 h-3.5 mr-1" />
-          ช่วงเวลา / Time Range
+          {language === 'th' ? 'ช่วงเวลา' : 'Time Range'}
         </label>
         <div className="flex flex-wrap gap-2">
           {timeRanges.map((range) => (
@@ -99,7 +99,7 @@ export default function ScenarioSelector() {
           ))}
           <button className="time-chip flex items-center space-x-1">
             <Calendar className="w-3.5 h-3.5" />
-            <span>กำหนดเอง</span>
+            <span>{language === 'th' ? 'กำหนดเอง' : 'Custom'}</span>
           </button>
         </div>
       </div>
@@ -112,7 +112,7 @@ export default function ScenarioSelector() {
             <Radio className="w-3.5 h-3.5 text-secondary-500" />
           </div>
           <span className="text-xs text-gray-500">
-            ข้อมูลจาก {systemStatus.dataSource.join(', ')}
+            {t('scenario.dataSource')} {systemStatus.dataSource.join(', ')}
           </span>
         </div>
         <div className="ml-auto flex items-center">

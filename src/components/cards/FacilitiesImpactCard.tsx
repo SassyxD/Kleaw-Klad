@@ -11,6 +11,7 @@ import {
 } from 'lucide-react'
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts'
 import { useDashboard } from '@/context/DashboardContext'
+import { useLanguage } from '@/context/LanguageContext'
 
 const facilityCategories = [
   { name: 'โรงพยาบาล', nameEn: 'Hospitals', type: 'hospital', count: 3, affected: 1, color: '#EF4444', icon: Hospital },
@@ -27,6 +28,7 @@ const chartData = facilityCategories.map(cat => ({
 }))
 
 export default function FacilitiesImpactCard() {
+  const { language, t } = useLanguage()
   const totalFacilities = facilityCategories.reduce((acc, cat) => acc + cat.count, 0)
   const totalAffected = facilityCategories.reduce((acc, cat) => acc + cat.affected, 0)
 
@@ -35,8 +37,8 @@ export default function FacilitiesImpactCard() {
       const data = payload[0].payload
       return (
         <div className="custom-tooltip">
-          <p className="font-medium">{data.name}</p>
-          <p className="text-xs">ได้รับผลกระทบ: {data.value}/{data.total}</p>
+          <p className="font-medium">{language === 'th' ? data.name : data.nameEn}</p>
+          <p className="text-xs">{language === 'th' ? 'ได้รับผลกระทบ' : 'Affected'}: {data.value}/{data.total}</p>
         </div>
       )
     }
@@ -53,9 +55,8 @@ export default function FacilitiesImpactCard() {
           </div>
           <div>
             <h2 className="text-base font-semibold text-navy-800">
-              โครงสร้างพื้นฐานที่ได้รับผลกระทบ
+              {t('facilities.title')}
             </h2>
-            <span className="text-xs text-gray-500">Critical Facilities Impact</span>
           </div>
         </div>
       </div>
@@ -103,7 +104,7 @@ export default function FacilitiesImpactCard() {
                   >
                     <Icon className="w-3.5 h-3.5" style={{ color: cat.color }} />
                   </div>
-                  <span className="text-sm text-navy-700">{cat.name}</span>
+                  <span className="text-sm text-navy-700">{language === 'th' ? cat.name : cat.nameEn}</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <span className="text-sm font-semibold" style={{ color: cat.color }}>
@@ -121,7 +122,7 @@ export default function FacilitiesImpactCard() {
       <div className="mt-4 pt-3 border-t border-gray-100">
         <div className="flex items-center space-x-2 text-xs text-gray-500">
           <Brain className="w-3.5 h-3.5 text-secondary-500" />
-          <span>วิเคราะห์ด้วย MindSpore GNN (Hydraulic-Aware Graph)</span>
+          <span>{t('facilities.analysis')}</span>
         </div>
       </div>
     </div>

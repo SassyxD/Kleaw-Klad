@@ -8,10 +8,12 @@ import {
   Minus
 } from 'lucide-react'
 import { useDashboard } from '@/context/DashboardContext'
+import { useLanguage } from '@/context/LanguageContext'
 import { formatNumber, getRiskColor, getTrendIcon, getTrendColor } from '@/lib/utils'
 
 export default function FloodAreaCard() {
   const { totalFloodedArea, affectedSubDistricts } = useDashboard()
+  const { language, t } = useLanguage()
 
   const maxArea = Math.max(...affectedSubDistricts.map(d => d.affectedArea))
 
@@ -36,9 +38,8 @@ export default function FloodAreaCard() {
           </div>
           <div>
             <h2 className="text-base font-semibold text-navy-800">
-              พื้นที่น้ำท่วมทั้งหมด
+              {t('flood.title')}
             </h2>
-            <span className="text-xs text-gray-500">Total Flooded Area</span>
           </div>
         </div>
       </div>
@@ -49,22 +50,23 @@ export default function FloodAreaCard() {
           <span className="text-3xl font-bold text-primary-700">
             {formatNumber(totalFloodedArea)}
           </span>
-          <span className="text-lg text-primary-600 font-medium">ไร่</span>
+          <span className="text-lg text-primary-600 font-medium">{t('flood.unit')}</span>
         </div>
         <div className="flex items-center mt-2 text-sm">
           <span className="text-danger-600 font-medium flex items-center">
             <TrendingUp className="w-4 h-4 mr-1" />
             +12.5%
           </span>
-          <span className="text-gray-500 ml-2">จากเมื่อวาน</span>
+          <span className="text-gray-500 ml-2">
+            {language === 'th' ? 'จากเมื่อวาน' : 'from yesterday'}
+          </span>
         </div>
       </div>
 
       {/* Top 5 Sub-districts Bar Chart */}
       <div className="space-y-3">
         <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
-          <span>พื้นที่ย่อยที่ได้รับผลกระทบสูงสุด</span>
-          <span>Top 5 Affected Areas</span>
+          <span>{t('flood.topAffected')}</span>
         </div>
 
         {affectedSubDistricts.slice(0, 5).map((district, index) => (
@@ -74,8 +76,9 @@ export default function FloodAreaCard() {
                 <span className="w-5 h-5 bg-gray-100 rounded text-xs flex items-center justify-center font-medium text-gray-600">
                   {index + 1}
                 </span>
-                <span className="text-sm font-medium text-navy-800">{district.nameTh}</span>
-                <span className="text-xs text-gray-400">({district.name})</span>
+                <span className="text-sm font-medium text-navy-800">
+                  {language === 'th' ? district.nameTh : district.name}
+                </span>
               </div>
               <div className="flex items-center space-x-2">
                 <span className={`${getTrendColor(district.trend)}`}>
@@ -102,19 +105,19 @@ export default function FloodAreaCard() {
       <div className="flex items-center justify-center space-x-4 mt-5 pt-4 border-t border-gray-100">
         <div className="flex items-center space-x-1.5">
           <div className="w-3 h-3 rounded-sm bg-danger-500" />
-          <span className="text-xs text-gray-600">วิกฤต</span>
+          <span className="text-xs text-gray-600">{language === 'th' ? 'วิกฤต' : 'Critical'}</span>
         </div>
         <div className="flex items-center space-x-1.5">
           <div className="w-3 h-3 rounded-sm bg-warning-500" />
-          <span className="text-xs text-gray-600">สูง</span>
+          <span className="text-xs text-gray-600">{language === 'th' ? 'สูง' : 'High'}</span>
         </div>
         <div className="flex items-center space-x-1.5">
           <div className="w-3 h-3 rounded-sm bg-warning-300" />
-          <span className="text-xs text-gray-600">ปานกลาง</span>
+          <span className="text-xs text-gray-600">{language === 'th' ? 'ปานกลาง' : 'Medium'}</span>
         </div>
         <div className="flex items-center space-x-1.5">
           <div className="w-3 h-3 rounded-sm bg-success-500" />
-          <span className="text-xs text-gray-600">ต่ำ</span>
+          <span className="text-xs text-gray-600">{language === 'th' ? 'ต่ำ' : 'Low'}</span>
         </div>
       </div>
     </div>

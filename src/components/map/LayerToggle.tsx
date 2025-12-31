@@ -8,6 +8,7 @@ import {
   Radio
 } from 'lucide-react'
 import { useDashboard } from '@/context/DashboardContext'
+import { useLanguage } from '@/context/LanguageContext'
 import { cn } from '@/lib/utils'
 
 const layerIcons: Record<string, any> = {
@@ -17,13 +18,24 @@ const layerIcons: Record<string, any> = {
   sensors: Radio,
 }
 
+const layerTranslationKeys: Record<string, string> = {
+  flood: 'map.floodExtent',
+  evacuation: 'map.evacuationRoutes',
+  facilities: 'map.facilities',
+  sensors: 'map.sensors',
+}
+
 export default function LayerToggle() {
   const { mapLayers, toggleLayer } = useDashboard()
+  const { t, language } = useLanguage()
 
   return (
     <div className="flex flex-wrap gap-2">
       {mapLayers.map((layer) => {
         const Icon = layerIcons[layer.id] || Droplets
+        const translationKey = layerTranslationKeys[layer.id]
+        const label = translationKey ? t(translationKey) : (language === 'th' ? layer.nameTh : layer.name)
+        
         return (
           <button
             key={layer.id}
@@ -36,7 +48,7 @@ export default function LayerToggle() {
             )}
           >
             <Icon className="w-4 h-4" />
-            <span>{layer.nameTh}</span>
+            <span>{label}</span>
           </button>
         )
       })}

@@ -12,10 +12,12 @@ import {
   RefreshCw
 } from 'lucide-react'
 import { useDashboard } from '@/context/DashboardContext'
+import { useLanguage } from '@/context/LanguageContext'
 import { cn } from '@/lib/utils'
 
 export default function SystemStatusCard() {
   const { systemStatus } = useDashboard()
+  const { language, t } = useLanguage()
 
   const getStatusIndicator = (status: string) => {
     switch (status) {
@@ -23,21 +25,21 @@ export default function SystemStatusCard() {
         return (
           <div className="flex items-center space-x-1.5">
             <CheckCircle2 className="w-4 h-4 text-success-500" />
-            <span className="text-sm font-medium text-success-600">Online</span>
+            <span className="text-sm font-medium text-success-600">{t('system.online')}</span>
           </div>
         )
       case 'processing':
         return (
           <div className="flex items-center space-x-1.5">
             <Loader2 className="w-4 h-4 text-primary-500 animate-spin" />
-            <span className="text-sm font-medium text-primary-600">Processing</span>
+            <span className="text-sm font-medium text-primary-600">{t('system.processing')}</span>
           </div>
         )
       case 'offline':
         return (
           <div className="flex items-center space-x-1.5">
             <AlertCircle className="w-4 h-4 text-danger-500" />
-            <span className="text-sm font-medium text-danger-600">Offline</span>
+            <span className="text-sm font-medium text-danger-600">{t('system.offline')}</span>
           </div>
         )
       default:
@@ -47,22 +49,19 @@ export default function SystemStatusCard() {
 
   const stats = [
     {
-      label: 'อัปเดตล่าสุด',
-      labelEn: 'Last Update',
+      label: t('system.lastUpdate'),
       value: systemStatus.lastUpdate,
       icon: Clock,
       color: 'text-gray-600'
     },
     {
-      label: 'เวลา Inference',
-      labelEn: 'Inference Time',
+      label: t('system.inference'),
       value: systemStatus.inferenceTime,
       icon: Zap,
       color: 'text-primary-600'
     },
     {
-      label: 'ความแม่นยำ Segmentation',
-      labelEn: 'Segmentation Accuracy',
+      label: t('system.accuracy'),
       value: `${systemStatus.segmentationAccuracy}% IoU`,
       icon: Target,
       color: 'text-success-600'
@@ -79,9 +78,8 @@ export default function SystemStatusCard() {
           </div>
           <div>
             <h2 className="text-base font-semibold text-navy-800">
-              สถานะระบบ AI
+              {t('system.title')}
             </h2>
-            <span className="text-xs text-gray-500">AI System Status</span>
           </div>
         </div>
         {getStatusIndicator(systemStatus.modelStatus)}
@@ -110,7 +108,9 @@ export default function SystemStatusCard() {
 
       {/* AI Models Info */}
       <div className="mt-4 pt-3 border-t border-gray-100">
-        <div className="text-xs text-gray-500 mb-2">โมเดล AI ที่ใช้งาน</div>
+        <div className="text-xs text-gray-500 mb-2">
+          {language === 'th' ? 'โมเดล AI ที่ใช้งาน' : 'Active AI Models'}
+        </div>
         <div className="flex flex-wrap gap-2">
           <span className="px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs font-medium">
             MindSpore
@@ -130,7 +130,9 @@ export default function SystemStatusCard() {
       {/* Refresh Button */}
       <button className="w-full mt-4 flex items-center justify-center space-x-2 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
         <RefreshCw className="w-4 h-4 text-gray-600" />
-        <span className="text-sm text-gray-600 font-medium">รีเฟรชข้อมูล</span>
+        <span className="text-sm text-gray-600 font-medium">
+          {language === 'th' ? 'รีเฟรชข้อมูล' : 'Refresh Data'}
+        </span>
       </button>
     </div>
   )

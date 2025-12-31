@@ -9,13 +9,14 @@ import {
   SkipForward
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useLanguage } from '@/context/LanguageContext'
 
 interface TimeSliderProps {
   value: number
   onChange: (value: number) => void
 }
 
-const timeSteps = [
+const timeStepsTh = [
   { value: 0, label: 'ปัจจุบัน' },
   { value: 1, label: '+30 นาที' },
   { value: 2, label: '+1 ชม.' },
@@ -24,8 +25,19 @@ const timeSteps = [
   { value: 5, label: '+6 ชม.' },
 ]
 
+const timeStepsEn = [
+  { value: 0, label: 'Current' },
+  { value: 1, label: '+30 min' },
+  { value: 2, label: '+1 hr' },
+  { value: 3, label: '+2 hr' },
+  { value: 4, label: '+3 hr' },
+  { value: 5, label: '+6 hr' },
+]
+
 export default function TimeSlider({ value, onChange }: TimeSliderProps) {
   const [isPlaying, setIsPlaying] = React.useState(false)
+  const { language, t } = useLanguage()
+  const timeSteps = language === 'th' ? timeStepsTh : timeStepsEn
 
   React.useEffect(() => {
     if (isPlaying) {
@@ -34,7 +46,7 @@ export default function TimeSlider({ value, onChange }: TimeSliderProps) {
       }, 2000)
       return () => clearInterval(interval)
     }
-  }, [isPlaying, value, onChange])
+  }, [isPlaying, value, onChange, timeSteps.length])
 
   return (
     <div className="bg-white rounded-xl shadow-card p-4">
@@ -42,7 +54,9 @@ export default function TimeSlider({ value, onChange }: TimeSliderProps) {
         {/* Time Label */}
         <div className="flex items-center space-x-2 min-w-[120px]">
           <Clock className="w-4 h-4 text-primary-500" />
-          <span className="text-sm font-medium text-navy-800">พยากรณ์:</span>
+          <span className="text-sm font-medium text-navy-800">
+            {t('time.forecast')}:
+          </span>
         </div>
 
         {/* Playback Controls */}
@@ -113,8 +127,16 @@ export default function TimeSlider({ value, onChange }: TimeSliderProps) {
 
       {/* Forecast Info */}
       <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
-        <span>📡 ข้อมูลดาวเทียม: 31 ธ.ค. 2568 10:30 UTC</span>
-        <span>🤖 พยากรณ์โดย AI Ensemble Model</span>
+        <span>
+          {language === 'th' 
+            ? '📡 ข้อมูลดาวเทียม: 31 ธ.ค. 2568 10:30 UTC' 
+            : '📡 Satellite Data: Dec 31, 2025 10:30 UTC'}
+        </span>
+        <span>
+          {language === 'th' 
+            ? '🤖 พยากรณ์โดย AI Ensemble Model' 
+            : '🤖 Forecast by AI Ensemble Model'}
+        </span>
       </div>
     </div>
   )

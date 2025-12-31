@@ -11,10 +11,12 @@ import {
   Brain
 } from 'lucide-react'
 import { useDashboard } from '@/context/DashboardContext'
-import { cn, getStatusColor, getStatusLabel } from '@/lib/utils'
+import { useLanguage } from '@/context/LanguageContext'
+import { cn, getStatusColor } from '@/lib/utils'
 
 export default function EvacuationRoutesCard() {
   const { evacuationRoutes } = useDashboard()
+  const { language, t } = useLanguage()
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -29,6 +31,19 @@ export default function EvacuationRoutesCard() {
     }
   }
 
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'open':
+        return t('evacuation.normal')
+      case 'at_risk':
+        return t('evacuation.atRisk')
+      case 'closed':
+        return t('evacuation.closed')
+      default:
+        return status
+    }
+  }
+
   return (
     <div className="dashboard-card animate-in" style={{ animationDelay: '0.3s' }}>
       {/* Header */}
@@ -39,9 +54,8 @@ export default function EvacuationRoutesCard() {
           </div>
           <div>
             <h2 className="text-base font-semibold text-navy-800">
-              สถานะการอพยพและเส้นทาง
+              {t('evacuation.title')}
             </h2>
-            <span className="text-xs text-gray-500">Evacuation & Route Status</span>
           </div>
         </div>
       </div>
@@ -62,7 +76,7 @@ export default function EvacuationRoutesCard() {
                 <div className="flex-1">
                   <div className="flex items-center space-x-2 mb-1">
                     {getStatusIcon(route.status)}
-                    <span className="text-sm font-medium text-navy-800">{route.nameTh}</span>
+                    <span className="text-sm font-medium text-navy-800">{language === 'th' ? route.nameTh : route.name}</span>
                   </div>
                   
                   <div className="flex items-center space-x-4 text-xs text-gray-500">
@@ -90,7 +104,7 @@ export default function EvacuationRoutesCard() {
               {route.status !== 'closed' && (
                 <div className="mt-2">
                   <div className="flex items-center justify-between text-xs mb-1">
-                    <span className="text-gray-500">การจราจร</span>
+                    <span className="text-gray-500">{language === 'th' ? 'การจราจร' : 'Traffic'}</span>
                     <span className={cn(
                       "font-medium",
                       route.congestionLevel > 70 ? 'text-danger-600' :
@@ -120,7 +134,7 @@ export default function EvacuationRoutesCard() {
       <div className="mt-4 pt-3 border-t border-gray-100">
         <div className="flex items-center space-x-2 text-xs text-gray-500">
           <Brain className="w-3.5 h-3.5 text-primary-500" />
-          <span>เส้นทางจาก RL Policy (PPO - Proximal Policy Optimization)</span>
+          <span>{t('evacuation.source')}</span>
         </div>
       </div>
     </div>
